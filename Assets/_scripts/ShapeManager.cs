@@ -15,7 +15,7 @@ public class ShapeManager : MonoBehaviour {
 	public void CalculateButton()
 	{
 		// set the side length equal to the user input
-		sideLength = int.Parse(userInputText.text);
+		sideLength = float.Parse(userInputText.text);
 
 		switch (shapeDropdown.value)
 		{
@@ -41,36 +41,48 @@ public class ShapeManager : MonoBehaviour {
 
 	private void CalculateSquare()
 	{
-		// calculate all of the square metrics based on the user input
-		perimeter = 4 * sideLength;
+		// square:
+		perimeter = 4f * sideLength;
 		area = Mathf.Pow(sideLength, 2f);
+		// cube:
 		volume = Mathf.Pow(sideLength, 3f);
-		totalSurfaceArea = area * 6;
+		totalSurfaceArea = area * 6f;
 	}
 
 	private void CalculateCircle()
 	{
-		// calculate all of the circle metrics based on the user input
+		// circle:
 		perimeter = 2f * Mathf.PI * sideLength;
 		area = Mathf.PI * Mathf.Pow(sideLength, 2f);
+		// sphere:
 		volume = 4f / 3f * Mathf.PI * Mathf.Pow(sideLength, 3f);
-		totalSurfaceArea = area * 4;
+		totalSurfaceArea = area * 4f;
 	}
 
 	private void CalculateTriangle()
 	{
-		// calculate all of the triangle metrics based on the user input
+		// Equilateral triangle:
 		perimeter = sideLength * 3f;
 		area = Mathf.Sqrt(3f) / 4f * Mathf.Pow(sideLength, 2f);
-		//float height = 
-		//volume = area * height / 3;
-		totalSurfaceArea = area * 4f;
+
+		// Triangular based pyramid (equilateral):
+		// length from the middle of the triangle to a vertex
+		float midToVertex = sideLength * Mathf.Sqrt(3f) / 3f;
+		// use pythagoras to calcualte the height of the triangular based pyramid
+		float height = Mathf.Sqrt(Mathf.Pow(sideLength, 2f) - Mathf.Pow(midToVertex, 2f));
+		volume = area * height / 3f;
+		totalSurfaceArea = area * 4f;		
 	}
 
 	private void CalculateHexagon()
 	{
-		// calculate all of the hexagon metrics based on the user input
-
+		// hexagon:
+		perimeter = sideLength * 6f;
+		area = 3f * Mathf.Sqrt(3f) / 2f * Mathf.Pow(sideLength, 2f);
+		// hexagonal prism:
+		volume = area * sideLength;
+		// TSA = 2 hexagons + 6 square sides
+		totalSurfaceArea = area * 2 + Mathf.Pow(sideLength, 2f) * 6;
 	}
 
 	private void DisplayMetrics()

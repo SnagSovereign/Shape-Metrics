@@ -7,6 +7,7 @@ public class ShapeManager : MonoBehaviour {
 
 	// UI objects
 	[SerializeField] Dropdown shapeDropdown;
+	[SerializeField] MeshFilter shapeModel;
 	[SerializeField] Text userInputText, perimeterText, areaText, volumeText, tsaText;
 
 	float sideLength, perimeter, area, volume, totalSurfaceArea;
@@ -16,26 +17,37 @@ public class ShapeManager : MonoBehaviour {
 	{
 		// set the side length equal to the user input
 		sideLength = float.Parse(userInputText.text);
-
+		string shape;
 		switch (shapeDropdown.value)
 		{
 			case 0:
 				//square
+				shape = "cube";
 				CalculateSquare();
 				break;
 			case 1:
 				//circle
+				shape = "sphere";
 				CalculateCircle();
 				break;
 			case 2:
 				//triangle
+				shape = "pyramid";
 				CalculateTriangle();
 				break;
 			case 3:
 				//hexagon
+				shape = "hexagonal_prism";
 				CalculateHexagon();
 				break;
+			default:
+				//error message
+				Debug.LogError("Error! A shape must be selected!");
+				shape = null; //set shape to null so it not unassigned
+				break;
 		}
+		// display the corresponding 3D shape and metrics
+		shapeModel.mesh = Resources.Load<Mesh>("models/" + shape);
 		DisplayMetrics();
 	}
 

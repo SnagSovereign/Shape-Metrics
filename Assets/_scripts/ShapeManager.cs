@@ -8,7 +8,7 @@ public class ShapeManager : MonoBehaviour {
 	// UI objects
 	[SerializeField] Dropdown shapeDropdown;
 	[SerializeField] MeshFilter shapeModel;
-	[SerializeField] Text userInputText, perimeterText, areaText, volumeText, tsaText;
+	[SerializeField] Text userInputText, userInputLabel, perimeterText, areaText, volumeText, tsaText;
 
 	float sideLength, perimeter, area, volume, totalSurfaceArea;
 
@@ -17,28 +17,54 @@ public class ShapeManager : MonoBehaviour {
 	{
 		// set the side length equal to the user input
 		sideLength = float.Parse(userInputText.text);
-		string shape;
+
 		switch (shapeDropdown.value)
 		{
 			case 0:
 				//square
-				shape = "cube";
 				CalculateSquare();
 				break;
 			case 1:
 				//circle
-				shape = "sphere";
 				CalculateCircle();
 				break;
 			case 2:
 				//triangle
-				shape = "pyramid";
 				CalculateTriangle();
 				break;
 			case 3:
 				//hexagon
-				shape = "hexagonal_prism";
 				CalculateHexagon();
+				break;
+			default:
+				//error message
+				Debug.LogError("Error! A shape must be selected!");
+				break;
+		}
+		DisplayMetrics();
+	}
+
+	public void ChangeShape()
+    {
+		string shape, inputLabel = "Side Length:";
+		switch (shapeDropdown.value)
+        {
+			case 0:
+				//square
+				shape = "cube";
+				break;
+			case 1:
+				//circle
+				shape = "sphere";
+				inputLabel = "Radius:";
+				break;
+			case 2:
+				//triangle
+				shape = "pyramid";
+				break;
+			case 3:
+				//hexagon
+				shape = "hexagonal_prism";
 				break;
 			default:
 				//error message
@@ -46,9 +72,11 @@ public class ShapeManager : MonoBehaviour {
 				shape = null; //set shape to null so it not unassigned
 				break;
 		}
-		// display the corresponding 3D shape and metrics
+		// Display corresponding 3D shape and input label
 		shapeModel.mesh = Resources.Load<Mesh>("models/" + shape);
-		DisplayMetrics();
+		userInputLabel.text = inputLabel;
+		// clear the previous calculation results
+		ClearMetrics();
 	}
 
 	private void CalculateSquare()
@@ -97,11 +125,19 @@ public class ShapeManager : MonoBehaviour {
 		totalSurfaceArea = area * 2 + Mathf.Pow(sideLength, 2f) * 6;
 	}
 
-	private void DisplayMetrics()
-	{
-		perimeterText.text = perimeter.ToString();
-		areaText.text = area.ToString();
-		volumeText.text = volume.ToString();
-		tsaText.text = totalSurfaceArea.ToString();
+    private void DisplayMetrics()
+    {
+        perimeterText.text = perimeter.ToString();
+        areaText.text = area.ToString();
+        volumeText.text = volume.ToString();
+        tsaText.text = totalSurfaceArea.ToString();
+    }
+
+    private void ClearMetrics()
+    {
+		perimeterText.text = null;
+		areaText.text = null;
+		volumeText.text = null;
+		tsaText.text = null;
 	}
 }
